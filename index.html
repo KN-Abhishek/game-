@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cursed Mansion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <video autoplay muted loop id="background-video">
+        <source src="a.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <!-- Title Screen -->
+    <div id="title-screen">
+        <button id="start-button">Play Game</button>
+    </div>
+
+    <!-- Game Screen -->
+    <img id="ghost" src="Subject.png" alt="Ghost">
+
+    <div id="blood-container"></div>
+
+    <div id="game-container">
+        <div id="game-content">
+            <h1>Welcome to the Haunted Mansion</h1>
+            <p id="story"></p>
+            <button class="choice-button" onclick="choose('enter')">Enter</button>
+            <button class="choice-button" onclick="choose('leave')">Leave</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
