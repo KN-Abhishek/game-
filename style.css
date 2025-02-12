@@ -1,11 +1,6 @@
 /* General Styles */
-
-@import url('https://fonts.googleapis.com/css2?family=Erica+One&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
 body {
-    font-family: "Erica One", serif;
-    font-weight: 400;
-    font-style: normal;
+    font-family: Arial, sans-serif;
     text-align: center;
     margin: 0;
     padding: 0;
@@ -63,7 +58,6 @@ body {
     background-position: center;
     width: 100%; /* Restrict width to 70% */
     height: 100vh;
-    cursor: url('aimm.png') 20 20, crosshair;
    
 }
 

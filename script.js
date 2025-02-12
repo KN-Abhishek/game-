@@ -18,8 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let gunshotSound = new Audio("gunshot.mp3");
     gunshotSound.preload = "auto";  // Preload for instant playback
     gunshotSound.volume = 0.8;  
-    let hasGun = false; // Track if player has the gun
-    let isShootingMode = false;      // Adjust volume
+        
 
     startButton.addEventListener("click", function () {
         titleScreen.style.display = "none";
@@ -155,6 +154,7 @@ function showPuzzle() {
     puzzleContainer.appendChild(puzzleGrid);
 
     let pieces = [];
+    let draggedPiece = null; // Store reference to dragged piece
 
     // Create an array of indexes and shuffle them for randomness
     let shuffledIndexes = Array.from({ length: 9 }, (_, i) => i).sort(() => Math.random() - 0.5);
@@ -171,6 +171,48 @@ function showPuzzle() {
 
         puzzlePiecesContainer.appendChild(piece); // Append to pieces container
         pieces.push(piece);
+
+        // **Drag-and-Drop Events (Desktop)**
+        piece.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", e.target.dataset.index);
+        });
+
+        // **Touch Events (Mobile)**
+        piece.addEventListener("touchstart", (e) => {
+            e.preventDefault(); // Prevent scrolling
+            draggedPiece = e.target;
+        }, { passive: true });
+
+        piece.addEventListener("touchmove", (e) => {
+            e.preventDefault(); // Prevent scrolling
+            if (draggedPiece) {
+                let touch = e.touches[0];
+                draggedPiece.style.position = "absolute";
+                draggedPiece.style.left = `${touch.clientX - 50}px`;
+                draggedPiece.style.top = `${touch.clientY - 50}px`;
+            }
+        }, { passive: false });
+
+        piece.addEventListener("touchend", (e) => {
+            e.preventDefault(); // Prevent scrolling
+            if (draggedPiece) {
+                let touch = e.changedTouches[0];
+                let closestSlot = document.elementFromPoint(touch.clientX, touch.clientY);
+                
+                if (closestSlot && closestSlot.classList.contains("puzzle-slot") && closestSlot.childNodes.length === 0) {
+                    closestSlot.appendChild(draggedPiece);
+                    draggedPiece.style.position = "static"; // Reset positioning
+                    
+                    // Check if the dropped piece is in the correct slot
+                    if (closestSlot.dataset.index === draggedPiece.dataset.index) {
+                        draggedPiece.classList.add("correct");
+                    }
+                }
+                draggedPiece = null;
+            }
+
+            checkWinCondition();
+        }, { passive: true });
     });
 
     for (let i = 0; i < 9; i++) {
@@ -184,6 +226,7 @@ function showPuzzle() {
 
         puzzleGrid.appendChild(slot);
 
+        // **Drag-and-Drop Events (Desktop)**
         slot.addEventListener("dragover", (e) => {
             e.preventDefault();
         });
@@ -197,21 +240,14 @@ function showPuzzle() {
                 slot.appendChild(draggedPiece);
                 draggedPiece.style.position = "static";
 
-                // Check if the dropped piece is in the correct slot
                 if (slot.dataset.index === draggedPiece.dataset.index) {
-                    draggedPiece.classList.add("correct"); // Optional: add style for correct pieces
+                    draggedPiece.classList.add("correct");
                 }
             }
 
             checkWinCondition();
         });
     }
-
-    pieces.forEach(piece => {
-        piece.addEventListener("dragstart", (e) => {
-            e.dataTransfer.setData("text/plain", e.target.dataset.index);
-        });
-    });
 }
 
 // Function to check if all puzzle pieces are in the correct place
@@ -230,34 +266,30 @@ function checkWinCondition() {
 
     if (correctPieces === 9) { // All pieces are correct
         setTimeout(() => {
-            // Remove or hide the puzzle container
             document.getElementById("puzzle-container").style.display = "none";
 
             // Create a key element
             let key = document.createElement("img");
-            key.src = "keys.gif";  // Replace with actual key image
+            key.src = "keys.gif";
             key.id = "secret-key";
             key.style.position = "absolute";
             key.style.left = "50%";
             key.style.top = "50%";
             key.style.transform = "translate(-50%, -50%) scale(0)";
-            key.style.width = "100px"; // Adjust size
+            key.style.width = "100px";
             key.style.height = "auto";
             key.style.cursor = "pointer";
-            key.style.transition = "transform 1s ease-out"; // Smooth animation
+            key.style.transition = "transform 1s ease-out";
 
             document.getElementById("game-container").appendChild(key);
 
-            // Animate the key appearing
             setTimeout(() => {
                 key.style.transform = "translate(-50%, -50%) scale(1)";
             }, 100);
 
-            // Allow player to collect the key
             key.addEventListener("click", function () {
-                key.remove(); // Remove key from screen
+                key.remove();
 
-                // Create win message
                 let winMessage = document.createElement("div");
                 winMessage.innerHTML = "<h2>You Won!</h2><p>You found the way out of the cursed mansion!</p>";
                 winMessage.style.position = "absolute";
@@ -272,7 +304,6 @@ function checkWinCondition() {
                 winMessage.style.fontSize = "20px";
                 document.getElementById("game-container").appendChild(winMessage);
 
-                // Create Buttons Container
                 let buttonContainer = document.createElement("div");
                 buttonContainer.style.display = "flex";
                 buttonContainer.style.justifyContent = "center";
@@ -280,7 +311,6 @@ function checkWinCondition() {
                 buttonContainer.style.marginTop = "20px";
                 winMessage.appendChild(buttonContainer);
 
-                // Restart Button
                 let restartButton = document.createElement("button");
                 restartButton.innerText = "Restart";
                 restartButton.style.padding = "10px 20px";
@@ -292,10 +322,9 @@ function checkWinCondition() {
                 restartButton.style.borderRadius = "5px";
 
                 restartButton.addEventListener("click", function () {
-                    location.reload(); // Refresh the page to restart the game
+                    location.reload();
                 });
 
-                // Get Out Button
                 let getOutButton = document.createElement("button");
                 getOutButton.innerText = "Get Out";
                 getOutButton.style.padding = "10px 20px";
@@ -307,15 +336,9 @@ function checkWinCondition() {
                 getOutButton.style.borderRadius = "5px";
 
                 getOutButton.addEventListener("click", function () {
-                    // Move to the next scene (han.webp background)
-                    updateScene(
-                        "You step outside into the unknown...Run for your life!",
-                        "han.webp",
-                        []
-                    );
+                    updateScene("You step outside into the unknown...Run for your life!", "han.webp", []);
                 });
 
-                // Append buttons to container
                 buttonContainer.appendChild(restartButton);
                 buttonContainer.appendChild(getOutButton);
             });
@@ -323,6 +346,7 @@ function checkWinCondition() {
         }, 500);
     }
 }
+
 
 
 
