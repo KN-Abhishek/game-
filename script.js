@@ -166,8 +166,8 @@ function showPuzzle() {
         piece.setAttribute("draggable", "true");
         piece.dataset.index = randomIndex; // Store correct position index
 
-        piece.style.width = "150px"; // Larger size
-        piece.style.height = "150px";
+        piece.style.width = "100px"; // Larger size
+        piece.style.height = "100px";
 
         puzzlePiecesContainer.appendChild(piece); // Append to pieces container
         pieces.push(piece);
@@ -178,9 +178,9 @@ function showPuzzle() {
         slot.classList.add("puzzle-slot");
         slot.dataset.index = i; // Store correct index
 
-        slot.style.width = "150px"; 
-        slot.style.height = "150px"; 
-        slot.style.border = "2px dashed white"; // Make grid visible
+        slot.style.width = "100px"; 
+        slot.style.height = "100px"; 
+        slot.style.border = "1px dashed white"; // Make grid visible
 
         puzzleGrid.appendChild(slot);
 
