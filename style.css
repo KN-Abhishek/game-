@@ -48,6 +48,17 @@ body {
     flex-direction: column;
     
 }
+#sub {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 20px;
+    height: auto;
+    transform: translate(-50%, -50%);
+    width: 200px; /* Adjust size */
+    opacity: 0.3; /* Set lower opacity */
+    z-index: -1; /* Send it behind the button */
+}
 
 
 /* Game Screen Background */
