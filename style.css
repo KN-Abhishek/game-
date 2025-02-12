@@ -5,7 +5,6 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: url('w.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -29,6 +28,12 @@ body {
     pointer-events: none;
     animation: fadeOut 1s ease-out forwards;
 }
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.5); }
+}
+
 /* Title Screen Background */
 #title-screen {
     margin-top: 30px;
@@ -48,12 +53,11 @@ body {
 /* Game Screen Background */
 #game-container {
     display: none; /* Initially hidden */
-    margin-top: 30px;
     background: no-repeat center center fixed;
-    background-size: contain; /* Ensures the whole image is visible */
+    background-size: cover; /* Ensures the whole image is visible */
     background-position: center;
     width: 100%; /* Restrict width to 70% */
-    height: 94vh;
+    height: 100vh;
     cursor: url('aimm.png') 20 20, crosshair;
    
 }
@@ -61,17 +65,67 @@ body {
 
 /* Play Button */
 #start-button {
-    padding: 8px 10px;
-    font-size: 20px;
-    background: red;
+    font-size: 24px;
+    font-weight: bold;
     color: white;
-    border: none;
     cursor: pointer;
     position: absolute;
     bottom: 280px;
     left: 49%;
     transform: translateX(-50%);
+    background: none;
+    border: none;
+    outline: none;
+    text-transform: uppercase;
+    transition: color 0.3s ease-in-out;
 }
+
+#start-button:hover {
+    color: rgb(247, 58, 58);
+    text-shadow: 0 0 10px red, 0 0 20px darkred;
+}
+
+/* Modal Styling */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: #ff0000;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Creepster', cursive;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, transform 0.2s ease-in-out;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    border: 2px solid red;
+    animation: flicker 1.5s infinite alternate, shake 0.5s infinite alternate;
+}
+
+.modal-content {
+    padding: 10px;
+    text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
+}
+
+/* Flickering Effect */
+@keyframes flicker {
+    0% { opacity: 0.8; text-shadow: 0 0 5px red, 0 0 10px crimson, 0 0 15px darkred; }
+    100% { opacity: 1; text-shadow: 0 0 10px darkred, 0 0 15px crimson, 0 0 20px red; }
+}
+
+/* Shaky Effect */
+@keyframes shake {
+    0% { transform: translate(-50%, -50%) rotate(-1deg); }
+    100% { transform: translate(-50%, -50%) rotate(1deg); }
+}
+
+
 
 /* Game Content */
 #game-content {
@@ -84,14 +138,145 @@ body {
     transform: translateX(-50%);
     
 }
+/* Style for the puzzle container */
+/* Style for the puzzle container */
+/* Style for the puzzle container */
+#puzzle-container {
+    display: flex;
+    flex-direction: row; /* Arrange pieces container and grid in a row */
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: 40px; /* Increased space between puzzle and pieces container */
+}
+
+/* Container for draggable puzzle pieces */
+#puzzle-pieces-container {
+    display: flex;
+    flex-direction: column; /* Stack pieces vertically */
+    flex-wrap: wrap; /* Allow wrapping if needed */
+    gap: 10px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    width: 500px; /* Adjust width */
+    height: 480px; /* Fixed height to prevent overflow */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+/* Grid layout for the puzzle */
+#puzzle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3, 150px);
+    gap: 5px; /* Space between slots */
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+    width: 480px; /* Ensures it remains centered */
+    height: 480px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Puzzle slots where pieces should be dropped */
+.puzzle-slot {
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style for the puzzle pieces */
+.puzzle-piece {
+    width: 140px; /* Slightly smaller to fit in slots */
+    height: 140px;
+    cursor: grab;
+    transition: transform 0.2s ease-in-out;
+}
+
+
+/* Puzzle slots where pieces should be dropped */
+.puzzle-slot {
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style for the puzzle pieces */
+.puzzle-piece {
+    width: 150px;
+    height: 150px;
+    cursor: grab;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Effect when dragging a piece */
+.puzzle-piece:active {
+    cursor: grabbing;
+    transform: scale(1.1);
+}
+
+/* When a piece is correctly placed */
+.correct {
+    border: 2px solid green;
+    animation: glow 0.8s infinite alternate;
+}
+
+/* Glowing effect for correctly placed pieces */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px green;
+    }
+    100% {
+        box-shadow: 0 0 20px green;
+    }
+}
+
+
+/*gun*/
+@keyframes fadeOut {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.2); }
+}
+
+.picked-up {
+    animation: fadeOut 0.5s forwards;
+}
+
+
+/* Typing Effect */
+/* Import a spooky font */
+@import url('https://fonts.googleapis.com/css2?family=Butcherman&display=swap');
+
+
+
 
 /* Typing Effect */
 #story {
-    font-size: 18px;
+    font-size: 22px;
+    font-family: 'Butcherman', cursive;
     text-align: center;
     min-height: 50px;
     overflow: hidden;
     white-space: pre-wrap;
+    color: #ffffff;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #660000;
+    animation: flicker 1.5s infinite alternate;
+}
+
+/* Flickering Effect */
+@keyframes flicker {
+    0% { opacity: 1; text-shadow: 0 0 10px #ff0000, 0 0 20px #660000; }
+    50% { opacity: 0.7; text-shadow: 0 0 5px #ff0000, 0 0 15px #330000; }
+    100% { opacity: 1; text-shadow: 0 0 10px #ff0000, 0 0 25px #990000; }
 }
 
 /* Buttons */
@@ -105,15 +290,33 @@ body {
 .choice-button {
     padding: 10px 20px;
     font-size: 18px;
+    font-family: 'Creepster', cursive;
     border: none;
-    background: red;
+    background: linear-gradient(45deg, darkred, black);
     color: white;
     cursor: pointer;
     min-width: 150px;
+    box-shadow: 0 0 10px red;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .choice-button:hover {
-    background: darkred;
+    background: black;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px red, 0 0 25px darkred;
 }
+
+/* Add a slow pulse effect */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+#story, .choice-button {
+    animation: pulse 2s infinite alternate;
+}
+
 #ghost {
     position: absolute;
     left: 50%;
@@ -147,18 +350,17 @@ body {
     }
     #title-screen {
         width: 100%;
-        height: 90vh;
+        
     }
 
     #game-container {
         width: 100%;
-        height: 90vh;
+        
     }
 
     #start-button {
         font-size: 18px;
         padding: 8px 12px;
-        bottom: 180px;
     }
 
     #game-content {
@@ -215,3 +417,57 @@ body {
 
     }
 }
+@media screen and (max-width: 930px) and (max-height: 430px) {
+    body {
+        background: black !important;
+    }
+
+    #background-video {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+    }
+
+    #title-screen {
+        width: 100%;
+        height: 100vh;
+        background-size: cover;
+    }
+
+    #game-container {
+        width: 100%;
+        height: 100vh;
+        margin-bottom: 0;
+    }
+
+    #start-button {
+        font-size: 16px;
+        padding: 6px 10px;
+        bottom: 40px;
+    }
+
+    #game-content {
+        width: 85%;
+        font-size: 14px;
+        bottom: 30px;
+        padding: 10px;
+    }
+
+    .choice-container {
+        flex-direction: row; 
+        gap: 10px;
+    }
+
+    .choice-button {
+        font-size: 14px;
+        padding: 6px 12px;
+        min-width: 120px;
+    }
+
+    #ghost {
+        top: 30%;
+        width: 80px;
+    }
+}
+
+
