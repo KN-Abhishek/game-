@@ -404,8 +404,7 @@ function choose(option) {
     }
     else if (option === "wait") {
         // Play eerie music
-        let eerieMusic = new Audio("eerie_music.mp3"); // Replace with actual file name
-        eerieMusic.loop = true; // Loop for continuous play
+        let eerieMusic = new Audio("pk.mp3"); // Replace with actual file name
         eerieMusic.volume = 0.5; // Adjust volume as needed
         eerieMusic.play();
     
@@ -544,7 +543,7 @@ function choose(option) {
     }
     else if (option === "light") {
         updateScene(
-            "With a deep breath, you push open the glowing door. A rush of fresh air fills your lungs as the scent of the outside world washes over you. Sunlight pierces through the mist, revealing a hidden path that leads away from the mansion. You've done it—you've escaped the nightmare. But as you step forward, a chilling whisper lingers behind you... 'This is not over.'",
+            "You push open the glowing door, breathing in fresh air as sunlight cuts through the mist. You've escaped—but a chilling whisper follows… 'This is not over.'",
             "insane.webp",
             ["Restart"],
             ["reset"]
