@@ -1,6 +1,11 @@
 /* General Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Erica+One&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Erica One", serif;
+    font-weight: 400;
+    font-style: normal;
     text-align: center;
     margin: 0;
     padding: 0;
@@ -143,7 +148,7 @@ body {
 /* Style for the puzzle container */
 #puzzle-container {
     display: flex;
-    flex-direction: row; /* Arrange pieces container and grid in a row */
+    flex-direction: column; /* Arrange pieces container and grid in a row */
     align-items: center;
     justify-content: center;
     position: absolute;
@@ -387,7 +392,7 @@ body {
     #start-button {
         font-size: 16px;
         padding: 6px 10px;
-        bottom: 100px;
+        bottom: 360px;
     }
 
     #game-content {
