@@ -336,7 +336,7 @@ function checkWinCondition() {
                 getOutButton.style.borderRadius = "5px";
 
                 getOutButton.addEventListener("click", function () {
-                    updateScene("You step outside into the unknown...Run for your life!", "han.webp", []);
+                    updateScene("You step outside into the unknown...Run for your life!", "es.webp", []);
                 });
 
                 buttonContainer.appendChild(restartButton);
