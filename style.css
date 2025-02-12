@@ -250,10 +250,6 @@ body {
 }
 
 
-/* Typing Effect */
-/* Import a spooky font */
-@import url('https://fonts.googleapis.com/css2?family=Butcherman&display=swap');
-
 
 
 
@@ -377,12 +373,12 @@ body {
     }
     #title-screen {
         width: 100%;
-        height: 80vh;
+        
     }
 
     #game-container {
         width: 100%;
-        height: 80vh;
+        
     }
     #title-screen h1 {
         font-size: 1.5rem;
