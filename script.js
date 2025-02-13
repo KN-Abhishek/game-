@@ -1,4 +1,4 @@
-// Wait for the DOM to fully load
+
 document.addEventListener("DOMContentLoaded", function () {
     let startButton = document.getElementById("start-button");
     let titleScreen = document.getElementById("title-screen");
@@ -6,27 +6,22 @@ document.addEventListener("DOMContentLoaded", function () {
     let ghost = document.getElementById("ghost");
     
 
-    // Hide ghost initially
+   
     ghost.style.display = "none";
 
 
-    // Start Game
-    let backgroundMusic = new Audio("sound.mp3"); // Replace with your actual file
-    backgroundMusic.loop = true; // Loop the music
-    backgroundMusic.volume = 0.5; // Adjust volume if needed
-
-    let gunshotSound = new Audio("gunshot.mp3");
-    gunshotSound.preload = "auto";  // Preload for instant playback
-    gunshotSound.volume = 0.8;  
+   
+    let backgroundMusic = new Audio("sound.mp3");
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.5; 
         
-
     startButton.addEventListener("click", function () {
         titleScreen.style.display = "none";
         gameContainer.style.display = "block";
         gameActive = true;
         backgroundMusic.play();
 
-        // Start the first scene
+        
         updateScene(
             "You stand before a creepy old mansion. The door is slightly open. Do you enter?",
             "han.webp",
@@ -47,12 +42,12 @@ function showModal(message) {
     modal.appendChild(modalContent);
     document.body.appendChild(modal);
 
-    // Show modal with eerie delay
+    
     setTimeout(() => {
         modal.style.opacity = "1";
     }, 10);
 
-    // Remove after 4 seconds for a haunting effect
+   
     setTimeout(() => {
         modal.style.opacity = "0";
         setTimeout(() => modal.remove(), 500);
@@ -61,14 +56,12 @@ function showModal(message) {
 
 
 
-// Function to animate ghost
-// Function to animate the ghost growing from center
 function moveGhost() {
     let ghost = document.getElementById("ghost");
     let hasCross = false;
 
     if (hasCross) {
-        ghost.style.display = "none"; // If the cross is collected, the ghost doesn't appear
+        ghost.style.display = "none"; 
         return;
     }
 
@@ -86,7 +79,7 @@ function moveGhost() {
 
     function animate() {
         if (hasCross) {
-            ghost.style.display = "none"; // If the cross is collected during animation, stop it
+            ghost.style.display = "none"; 
             return;
         }
         
@@ -104,7 +97,7 @@ function moveGhost() {
 
 
 
-// Function for typing effect
+
 function typeText(text) {
     let storyText = document.getElementById("story");
     storyText.innerHTML = "";
@@ -118,7 +111,7 @@ function typeText(text) {
     }
     typing();
 }
-// Function to update the scene
+
 function updateScene(text, image, buttonLabels, buttonActions) {
     let gameContent = document.getElementById("game-content");
     let gameContainer = document.getElementById("game-container");
@@ -132,59 +125,59 @@ function updateScene(text, image, buttonLabels, buttonActions) {
     gameContent.innerHTML = `<p id="story"></p>${buttonsHTML}`;
     typeText(text);
 }
-// Function to check if all puzzle pieces are in the correct place
+
 function showPuzzle() {
     let gameContainer = document.getElementById("game-container");
-    gameContainer.innerHTML = ""; // Clear previous content
-    gameContainer.style.backgroundImage = "url('painting.webp')"; // Set painting image
+    gameContainer.innerHTML = ""; 
+    gameContainer.style.backgroundImage = "url('painting.webp')"; 
 
-    // Create puzzle wrapper
+    
     let puzzleContainer = document.createElement("div");
     puzzleContainer.id = "puzzle-container";
     gameContainer.appendChild(puzzleContainer);
 
-    // Create container for draggable puzzle pieces
+   
     let puzzlePiecesContainer = document.createElement("div");
     puzzlePiecesContainer.id = "puzzle-pieces-container";
     puzzleContainer.appendChild(puzzlePiecesContainer);
 
-    // Create container for the puzzle grid
+    
     let puzzleGrid = document.createElement("div");
     puzzleGrid.id = "puzzle-grid";
     puzzleContainer.appendChild(puzzleGrid);
 
     let pieces = [];
-    let draggedPiece = null; // Store reference to dragged piece
+    let draggedPiece = null; 
 
-    // Create an array of indexes and shuffle them for randomness
+    
     let shuffledIndexes = Array.from({ length: 9 }, (_, i) => i).sort(() => Math.random() - 0.5);
 
     shuffledIndexes.forEach((randomIndex) => {
         let piece = document.createElement("img");
-        piece.src = `puzzle${randomIndex + 1}.png`; // Each piece should be a separate image
+        piece.src = `puzzle${randomIndex + 1}.png`;
         piece.classList.add("puzzle-piece");
         piece.setAttribute("draggable", "true");
-        piece.dataset.index = randomIndex; // Store correct position index
+        piece.dataset.index = randomIndex; 
 
-        piece.style.width = "100px"; // Larger size
+        piece.style.width = "100px"; 
         piece.style.height = "100px";
 
-        puzzlePiecesContainer.appendChild(piece); // Append to pieces container
+        puzzlePiecesContainer.appendChild(piece); 
         pieces.push(piece);
 
-        // **Drag-and-Drop Events (Desktop)**
+        
         piece.addEventListener("dragstart", (e) => {
             e.dataTransfer.setData("text/plain", e.target.dataset.index);
         });
 
-        // **Touch Events (Mobile)**
+        
         piece.addEventListener("touchstart", (e) => {
-            e.preventDefault(); // Prevent scrolling
+            e.preventDefault(); 
             draggedPiece = e.target;
         }, { passive: true });
 
         piece.addEventListener("touchmove", (e) => {
-            e.preventDefault(); // Prevent scrolling
+            e.preventDefault(); 
             if (draggedPiece) {
                 let touch = e.touches[0];
                 draggedPiece.style.position = "absolute";
@@ -194,16 +187,16 @@ function showPuzzle() {
         }, { passive: false });
 
         piece.addEventListener("touchend", (e) => {
-            e.preventDefault(); // Prevent scrolling
+            e.preventDefault(); 
             if (draggedPiece) {
                 let touch = e.changedTouches[0];
                 let closestSlot = document.elementFromPoint(touch.clientX, touch.clientY);
                 
                 if (closestSlot && closestSlot.classList.contains("puzzle-slot") && closestSlot.childNodes.length === 0) {
                     closestSlot.appendChild(draggedPiece);
-                    draggedPiece.style.position = "static"; // Reset positioning
+                    draggedPiece.style.position = "static"; 
                     
-                    // Check if the dropped piece is in the correct slot
+                    
                     if (closestSlot.dataset.index === draggedPiece.dataset.index) {
                         draggedPiece.classList.add("correct");
                     }
@@ -218,15 +211,14 @@ function showPuzzle() {
     for (let i = 0; i < 9; i++) {
         let slot = document.createElement("div");
         slot.classList.add("puzzle-slot");
-        slot.dataset.index = i; // Store correct index
-
+        slot.dataset.index = i; 
         slot.style.width = "100px"; 
         slot.style.height = "100px"; 
-        slot.style.border = "1px dashed white"; // Make grid visible
+        slot.style.border = "1px dashed white"; 
 
         puzzleGrid.appendChild(slot);
 
-        // **Drag-and-Drop Events (Desktop)**
+        
         slot.addEventListener("dragover", (e) => {
             e.preventDefault();
         });
@@ -250,7 +242,7 @@ function showPuzzle() {
     }
 }
 
-// Function to check if all puzzle pieces are in the correct place
+
 function checkWinCondition() {
     let slots = document.querySelectorAll(".puzzle-slot");
     let correctPieces = 0;
@@ -264,11 +256,11 @@ function checkWinCondition() {
         }
     });
 
-    if (correctPieces === 9) { // All pieces are correct
+    if (correctPieces === 9) { 
         setTimeout(() => {
             document.getElementById("puzzle-container").style.display = "none";
 
-            // Create a key element
+            
             let key = document.createElement("img");
             key.src = "keys.gif";
             key.id = "secret-key";
@@ -350,7 +342,7 @@ function checkWinCondition() {
 
 
 
-// Function to handle choices
+
 function choose(option) {
     let gameContainer = document.getElementById("game-container");
     let ghost = document.getElementById("ghost");
@@ -360,13 +352,13 @@ function choose(option) {
         ghost.style.display = "none";
     }
 
-    // Remove gun if it exists
+   
     let existingGun = document.getElementById("gun");
     if (existingGun) {
         existingGun.remove();
     }
 
-    // Remove cross if it exists
+    
     let existingCross = document.getElementById("cross");
     if (existingCross) {
         existingCross.remove();
@@ -380,38 +372,38 @@ function choose(option) {
     if (option === "enter") {
         updateScene("You step inside and see the front door , you spot a gun on the floor ,PICKUPTHEGUN!!", "gun.webp", 
             ["Go Inside", "Wait and Explore"], ["inside", "wait"]);
-    // Add gun image
+    
     let gunImage = document.createElement("img");
-    gunImage.src = "gun.gif"; // Replace with your actual gun image
+    gunImage.src = "gun.gif"; 
     gunImage.id = "gun";
     gunImage.style.position = "absolute";
-    gunImage.style.bottom = "50px"; // Adjust position as needed
+    gunImage.style.bottom = "50px"; 
     gunImage.style.left = "70%";
-    gunImage.style.width = "200px"; // Adjust size as needed
+    gunImage.style.width = "200px"; 
     gunImage.style.cursor = "pointer";
 
-    // Append the gun image to game-content
+    
     document.getElementById("game-container").appendChild(gunImage);
 
 
-    // Add event listener to collect the gun
+    
     gunImage.addEventListener("click", function () {
-        new Audio("reload.mp3").play(); // Play sound effect (Replace with actual file)
+        new Audio("reload.mp3").play(); 
         gunImage.remove();
         hasGun = true;
-        showModal("You picked up the gun!"); // Show message or update inventory
+        showModal("You picked up the gun!");
     });
     }
     else if (option === "wait") {
-        // Play eerie music
-        let eerieMusic = new Audio("pk.mp3"); // Replace with actual file name
-        eerieMusic.volume = 0.5; // Adjust volume as needed
+        
+        let eerieMusic = new Audio("pk.mp3"); 
+        eerieMusic.volume = 0.5; 
         eerieMusic.play();
     
-        // Display a creepy message while the music plays
+        
         updateScene(
             "You pause, sensing something unseen watching you. The silence is heavy… then, a faint whisper echoes in your ear. You can't tell where it's coming from.",
-            "gun.webp", // Replace with an appropriate background image
+            "gun.webp", 
             ["Go Back"],
             ["enter"]
         );
@@ -440,23 +432,23 @@ function choose(option) {
             ["examine_book", "stay"]
         );
     
-        // Wait for the scene to update before adding the GIF
+        
         setTimeout(() => {
             let gameContainer = document.getElementById("game-container");
             
-            // Create the GIF element
+            
             let bookGif = document.createElement("img");
-            bookGif.src = "clue.gif"; // Path to the GIF
+            bookGif.src = "clue.gif"; 
             bookGif.alt = "Mysterious Book";
             bookGif.id = "book";
-            bookGif.style.width = "150px";  // Adjust size as needed
+            bookGif.style.width = "150px";  
             bookGif.style.position = "absolute";
-            bookGif.style.top = "55%";      // Adjust position
+            bookGif.style.top = "55%";     
             bookGif.style.left = "90%"; 
             bookGif.style.transform = "translate(-50%, -50%)";
-            bookGif.style.cursor = "pointer";  // Make it clickable
+            bookGif.style.cursor = "pointer";  
             
-            // Click event to trigger 'examine_book' action
+            
             bookGif.addEventListener("click", () => {
                 bookGif.remove();
                 updateScene(
@@ -468,13 +460,13 @@ function choose(option) {
                 showModal("You have collected a clue!");
             });
     
-            // Append the GIF to the game container
+            
             gameContainer.appendChild(bookGif);
-        }, 100);  // Delay to ensure the scene updates before adding the GIF
+        }, 100);  
     }
     
     
-    // Handling book interaction
+    
     else if (option === "examine_book") {
         updateScene(
             "You carefully open the old book. As you turn the pages, strange symbols and a poem appear. The words seem to whisper a hidden message.",
@@ -490,30 +482,30 @@ function choose(option) {
         "upstairs.webp",
             ["Go Left", "Go Right"], ["left", "right"]);
         
-        setTimeout(moveGhost, 1000); // Ghost animation after 1 second
+        setTimeout(moveGhost, 1000); 
     
-        // Add cross image
+        
         let crossImage = document.createElement("img");
-        crossImage.src = "cross.gif"; // Replace with your actual cross image
+        crossImage.src = "cross.gif"; 
         crossImage.id = "cross";
         crossImage.style.position = "absolute";
-        crossImage.style.bottom = "170px"; // Adjust position as needed
+        crossImage.style.bottom = "170px"; 
         crossImage.style.left = "30%";
-        crossImage.style.transform = "translateX(-50%)"; // Center the cross
-        crossImage.style.width = "100px"; // Adjust size as needed
+        crossImage.style.transform = "translateX(-50%)"; 
+        crossImage.style.width = "100px"; 
         crossImage.style.cursor = "pointer";
     
-        // Append the cross image to game-content
+        
         document.getElementById("game-container").appendChild(crossImage);
     
-        // Add event listener to collect the cross
+        
         crossImage.addEventListener("click", function () {
             new Audio("p.mp3").play();
             crossImage.remove();
-            hasCross = true; // Update the flag
+            hasCross = true; 
             showModal("You picked up the cross! The ghost vanishes!");
         
-            // Hide the ghost immediately if it's present
+            
             document.getElementById("ghost").style.display = "none";
         });
         
@@ -570,7 +562,7 @@ function choose(option) {
         );
     } 
     
-    // New scene when "Close the Door" is selected
+    
     else if (option === "close_door") {
         updateScene(
             "As you shut the door, the lock clicks behind you. There's no way back. In the dim light, a massive mirror looms before you. But something is wrong… your reflection isn’t just a reflection—it’s an eerie ghost staring back. It raises a hand and whispers in a hollow voice: 'RUN… or seek the truth?'",
@@ -580,7 +572,7 @@ function choose(option) {
         );
     } 
     
-    // Running from the mirror
+   
     else if (option === "run_from_mirror") {
         updateScene(
             "You turn and sprint away, but the room twists around you. The mirror's reflection warps reality, pulling you back. Your own ghostly face grins as the world fades into darkness. You have been claimed by the haunted mirror.",
